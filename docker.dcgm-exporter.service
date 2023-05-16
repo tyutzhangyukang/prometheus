@@ -1,0 +1,15 @@
+[Unit]
+Description=NVIDIA DCGM Exporter
+After=docker.service
+Requires=docker.service
+
+[Service]
+TimeoutStartSec=0
+Restart=always
+ExecStartPre=-/usr/bin/docker stop %n
+ExecStartPre=-/usr/bin/docker rm %n
+ExecStartPre=/usr/bin/docker pull cache-mgmt001:5001/nvidia/k8s/dcgm-exporter:2.1.8-2.4.0-rc.3-ubi8
+ExecStart=/usr/bin/docker run --rm --gpus all --cap-add=SYS_ADMIN --cpus="0.5" --name %n -p 9400:9400 -v "/opt/deepops/nvidia-dcgm-exporter/dcgm-custom-metrics.csv:/etc/dcgm-exporter/default-counters.csv" cache-mgmt001:5001/nvidia/k8s/dcgm-exporter:2.1.8-2.4.0-rc.3-ubi8
+
+[Install]
+WantedBy=multi-user.target

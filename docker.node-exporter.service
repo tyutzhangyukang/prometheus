@@ -1,0 +1,15 @@
+[Unit]
+Description=Prometheus Node Exporter
+After=docker.service
+Requires=docker.service
+
+[Service]
+TimeoutStartSec=0
+Restart=always
+ExecStartPre=-/usr/bin/docker stop %n
+ExecStartPre=-/usr/bin/docker rm %n
+ExecStartPre=/usr/bin/docker pull cache-mgmt001:5001/prometheus/node-exporter
+ExecStart=/usr/bin/docker run --rm --network host --cpus=0.5  --pid=host --name %n -v /run/prometheus:/run/prometheus cache-mgmt001:5001/prometheus/node-exporter --collector.textfile.directory="/run/prometheus"
+
+[Install]
+WantedBy=multi-user.target
