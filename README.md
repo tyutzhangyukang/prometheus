@@ -4,6 +4,7 @@ https://hub.docker.com/r/zhangyukang/prometheus-node-exporter
 https://hub.docker.com/r/zhangyukang/nvidia-k8s-dcgm-exporter
 
 创建守护进程service文件 
+'''
 vim /etc/systemd/system/docker.node-exporter.service 
 [Unit]
 Description=Prometheus Node Exporter
