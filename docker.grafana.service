@@ -1,0 +1,15 @@
+[Unit]
+Description=Grafana
+After=docker.service
+Requires=docker.service
+
+[Service]
+TimeoutStartSec=0
+Restart=always
+ExecStartPre=-/usr/bin/docker stop %n
+ExecStartPre=-/usr/bin/docker rm %n
+ExecStartPre=/usr/bin/docker pull grafana/grafana
+ExecStart=/usr/bin/docker run --rm --network host --name %n -v /etc/grafana:/etc/grafana -v /var/lib/grafana:/var/lib/grafana grafana/grafana
+
+[Install]
+WantedBy=multi-user.target
