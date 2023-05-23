@@ -1,5 +1,5 @@
-# prometheus
-通过dcgm-exporter/node-exporter监控主机资源
+
+## 通过dcgm-exporter/node-exporter监控主机资源
 https://hub.docker.com/r/zhangyukang/prometheus-node-exporter
 https://hub.docker.com/r/zhangyukang/nvidia-k8s-dcgm-exporter
 
@@ -49,7 +49,8 @@ WantedBy=multi-user.target`
 
 
 
-prometheus + grafana节点
+## prometheus + grafana节点
+将prometheus.tar.gz grafana.tar.gz 解压放在 /etc/下 
 vim /etc/systemd/system/docker.prometheus.service
 `
 [Unit]
@@ -87,4 +88,7 @@ ExecStart=/usr/bin/docker run --rm --network host --name %n -v /etc/grafana:/etc
 [Install]
 WantedBy=multi-user.target
 `
+镜像  zhangyukang/prom-prometheus:latest   zhangyukang/grafana:latest
+来自于 prom/prometheus:latest   grafana/grafana:latest
+
 
