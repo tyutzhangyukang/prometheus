@@ -45,3 +45,46 @@ WantedBy=multi-user.target`
 
 将cvs文件放在/opt/deepops/nvidia-dcgm-exporter/dcgm-custom-metrics.csv底下 https://github.com/tyutzhangyukang/prometheus
 创建容器 两个镜像分别来自于： nvidia/k8s/dcgm-exporter:2.1.8-2.4.0-rc.3-ubi8 prometheus/node-exporter:latest
+
+
+
+
+prometheus + grafana节点
+vim /etc/systemd/system/docker.prometheus.service
+`
+[Unit]
+Description=Prometheus
+After=docker.service
+Requires=docker.service
+
+[Service]
+TimeoutStartSec=0
+Restart=always
+ExecStartPre=-/usr/bin/docker stop %n
+ExecStartPre=-/usr/bin/docker rm %n
+ExecStartPre=/usr/bin/docker pull prom/prometheus
+ExecStart=/usr/bin/docker run --rm --network host --name %n -v /etc/prometheus:/etc/prometheus -v deepops_prometheus_metrics:/prometheus prom/prometheus
+
+[Install]
+WantedBy=multi-user.target
+`
+
+vim /etc/systemd/system/docker.grafana.service
+`
+[Unit]
+Description=Grafana
+After=docker.service
+Requires=docker.service
+
+[Service]
+TimeoutStartSec=0
+Restart=always
+ExecStartPre=-/usr/bin/docker stop %n
+ExecStartPre=-/usr/bin/docker rm %n
+ExecStartPre=/usr/bin/docker pull grafana/grafana
+ExecStart=/usr/bin/docker run --rm --network host --name %n -v /etc/grafana:/etc/grafana -v /var/lib/grafana:/var/lib/grafana grafana/grafana
+
+[Install]
+WantedBy=multi-user.target
+`
+
